@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(),
+    return MaterialApp(
+      home: HomeAlter(),
     );
   }
 }
@@ -38,3 +38,130 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold();
   }
 }
+
+class HomeAlter extends StatelessWidget {
+  HomeAlter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Pantalla anterior"),
+          backgroundColor: Colors.purple[900],
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton( 
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      Products())),
+                      icon: Icon(Icons.arrow_circle_right_outlined)),
+                      Text("Pantalla anterior 1"),
+              IconButton( 
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      Products2())),
+                      icon: Icon(Icons.arrow_circle_right_outlined)),
+                      Text("Pantalla anterior 2"),
+                  ],
+                ),
+        ));
+  }
+}
+
+
+class Products extends StatelessWidget {
+  Products({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purple[900],
+      ),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Image.asset("images/logo.png"),
+                alignment: Alignment.center
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Inicio", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                      Icon(
+                        Icons.edit,
+                        color: Colors.purple[900],
+                        size: 30.0,
+                      ),
+                    ],
+                  ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Image.asset("images/Ropa1.png"),
+                alignment: Alignment.center
+              ),Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Image.asset("images/Ropa2.png"),
+                alignment: Alignment.center
+              ),   
+            ]
+          ),
+        ));
+  }
+}
+
+
+class Products2 extends StatelessWidget {
+  Products2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purple[900],
+      ),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Image.asset("images/logo.png"),
+                alignment: Alignment.center
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Inicio", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))
+                    ],
+                  ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Image.asset("images/Ropa1.png"),
+                alignment: Alignment.center
+              ),Container(
+                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                child: Image.asset("images/Ropa2.png"),
+                alignment: Alignment.center
+              ),   
+            ]
+          ),
+        ));
+  }
+}
+
