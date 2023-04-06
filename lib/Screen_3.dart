@@ -9,6 +9,8 @@ class DraweApp extends StatefulWidget {
 }
 
 class _DraweAppState extends State<DraweApp> {
+  var _isSelected = [false, false, false, false];
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -30,8 +32,11 @@ class _DraweAppState extends State<DraweApp> {
                       children: [
                         Container(
                           child: IconButton(
-                            onPressed: () => {},
-                            icon: const Icon(Icons.cancel_outlined),
+                            onPressed: () => {Navigator.of(context).pop()},
+                            icon: const Icon(
+                              Icons.cancel_outlined,
+                              color: Color.fromRGBO(251, 102, 102, 1),
+                            ),
                           ),
                         ),
                         Container(
@@ -53,43 +58,68 @@ class _DraweAppState extends State<DraweApp> {
                 ),
               ),
               Expanded(
-                child: ListView(
-                  children: [
-                    ListTile(
-                      leading: const Icon(
-                        Icons.home,
-                        color: Colors.grey,
-                      ),
-                      title: const Text('Inicio'),
-                      onTap: () {},
+                  child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.home,
+                      color: _isSelected[0]
+                          ? Color.fromRGBO(251, 102, 102, 1)
+                          : Colors.grey,
                     ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.library_books_rounded,
-                        color: Colors.grey,
-                      ),
-                      title: const Text('Productos'),
-                      onTap: () {},
+                    title: const Text('Inicio'),
+                    // tileColor: Colors.amber,
+                    tileColor:
+                        _isSelected[0] ? Color.fromARGB(26, 244, 4, 4) : null,
+                    onTap: () {
+                      setState(() => _isSelected[0] = !_isSelected[0]);
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.library_books_rounded,
+                      color: _isSelected[1]
+                          ? Color.fromRGBO(251, 102, 102, 1)
+                          : Colors.grey,
                     ),
-                    ListTile(
-                      title: const Text('Perfil'),
-                      leading: const Icon(
-                        Icons.switch_account_rounded,
-                        color: Colors.grey,
-                      ),
-                      onTap: () {},
+                    title: const Text('Productos'),
+                    tileColor:
+                        _isSelected[1] ? Color.fromARGB(26, 244, 4, 4) : null,
+                    onTap: () {
+                      setState(() => _isSelected[1] = !_isSelected[1]);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Perfil'),
+                    leading: Icon(
+                      Icons.switch_account_rounded,
+                      color: _isSelected[2]
+                          ? Color.fromRGBO(251, 102, 102, 1)
+                          : Colors.grey,
                     ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.settings,
-                        color: Colors.grey,
-                      ),
-                      title: const Text('Administrar'),
-                      onTap: () {},
+                    onTap: () {
+                      setState(() => _isSelected[2] = !_isSelected[2]);
+                    },
+                    tileColor:
+                        _isSelected[2] ? Color.fromARGB(26, 244, 4, 4) : null,
+                  ),
+                  Spacer(),
+                  ListTile(
+                    leading: Icon(
+                      Icons.settings,
+                      color: _isSelected[3]
+                          ? Color.fromRGBO(251, 102, 102, 1)
+                          : Colors.grey,
                     ),
-                  ],
-                ),
-              ),
+                    title: const Text('Administrar'),
+                    onTap: () {
+                      setState(() => _isSelected[3] = !_isSelected[3]);
+                    },
+                    tileColor:
+                        _isSelected[3] ? Color.fromARGB(26, 244, 4, 4) : null,
+                  ),
+                ],
+              )),
             ],
           ),
         ));
