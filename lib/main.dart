@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tienda_ropa/Screen_3.dart';
 import 'package:tienda_ropa/Screen_5.dart';
 
 void main() {
