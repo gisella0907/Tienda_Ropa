@@ -124,7 +124,7 @@ class _ProductosState extends State<Productos> {
                       setState(() => _isSelected[3] = !_isSelected[3]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdministrarProductos()),
+                        MaterialPageRoute(builder: (context) => AdministrarProductos({})),
                       );
                     },
                     tileColor:

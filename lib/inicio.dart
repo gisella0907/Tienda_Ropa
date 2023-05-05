@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tienda_ropa/productos.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class Inicio extends StatefulWidget {
   const Inicio({super.key});
@@ -18,7 +19,7 @@ class _InicioState extends State<Inicio> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-        drawer: Drawer(          
+        drawer: Drawer(
           backgroundColor: Colors.white,
           child: Column(
             children: [
@@ -119,11 +120,13 @@ class _InicioState extends State<Inicio> {
                           : Colors.grey,
                     ),
                     title: const Text('Administrar'),
-                    onTap: () {
+                    onTap: () async {
+                      Map<String, dynamic> products = await getProductsData();
                       setState(() => _isSelected[3] = !_isSelected[3]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdministrarProductos()),
+                        MaterialPageRoute(
+                            builder: (context) => AdministrarProductos(products)),
                       );
                     },
                     tileColor:
@@ -138,51 +141,46 @@ class _InicioState extends State<Inicio> {
           backgroundColor: Color.fromARGB(255, 141, 26, 74),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 25,bottom: 20),
+            child: Container(
+          color: Colors.white,
+          child: Column(children: [
+            Container(
+                margin: const EdgeInsets.only(top: 25, bottom: 20),
                 child: Image.asset("images/LogoLG.png", height: 130),
-                alignment: Alignment.center
+                alignment: Alignment.center),
+            Container(
+              //margin: const EdgeInsets.only(top: 1,bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("  Inicio",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                ],
               ),
-              Container(
-                //margin: const EdgeInsets.only(top: 1,bottom: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("  Inicio", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-                    ],
-                  ),
-              ),
-              Container(
-                  child: Row(children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Divider(
-                        thickness: 2,
-                        color: Colors.black,
-                      )
-                   ),
-                Expanded(
-                    child: Divider(
-                  thickness: 2,
-                )),
-              ])),
-              Container(
-                margin: const EdgeInsets.only(top: 25,bottom: 20),
+            ),
+            Container(
+                child: Row(children: [
+              SizedBox(width: 10),
+              Expanded(
+                  child: Divider(
+                thickness: 2,
+                color: Colors.black,
+              )),
+              Expanded(
+                  child: Divider(
+                thickness: 2,
+              )),
+            ])),
+            Container(
+                margin: const EdgeInsets.only(top: 25, bottom: 20),
                 child: Image.asset("images/novedad1.png"),
-                alignment: Alignment.center
-              ),Container(
-                margin: const EdgeInsets.only(top: 25,bottom: 20),
+                alignment: Alignment.center),
+            Container(
+                margin: const EdgeInsets.only(top: 25, bottom: 20),
                 child: Image.asset("images/novedad2.png"),
-                alignment: Alignment.center
-              ),   
-            ]
-          ),
-        )
-        )
-        );
+                alignment: Alignment.center),
+          ]),
+        )));
   }
 }

@@ -3,8 +3,8 @@ import 'objects/productos_id.dart';
 import 'package:tienda_ropa/inicio.dart';
 
 class AdministrarProductos extends StatefulWidget {
-  const AdministrarProductos({super.key});
-
+  AdministrarProductos(this.products,{super.key});
+  Map<String, dynamic> products;
   @override
   State<AdministrarProductos> createState() => _AdministrarProductosState();
 }
@@ -16,9 +16,9 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
       isChecked = !isChecked;
     });
   }
-
   @override
   Widget build(BuildContext context) {
+    print(widget.products);
     String _searchText = '';
     Producto miProducto = Producto(nombre: "Cahqueta", unidades: 1);
     Producto miProducto2 = Producto(nombre: "Short Jeans", unidades: 1);
