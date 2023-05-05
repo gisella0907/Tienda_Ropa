@@ -4,6 +4,12 @@ import 'package:tienda_ropa/productos.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
 import 'package:tienda_ropa/objects/peticionesGet.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+/*Para acceder a la variable tipoUsuario
+SharedPreferences prefs = await SharedPreferences.getInstance();
+String tipoAlmacenado = prefs.getString('tipoUsuario');*/
 
 class Inicio extends StatefulWidget {
   const Inicio({super.key});
@@ -156,6 +162,17 @@ class _InicioState extends State<Inicio> {
                   Text("  Inicio",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                  IconButton(
+                      icon: Icon(Icons.edit,
+                          color: Color.fromARGB(255, 141, 26, 74), size: 30),
+                      onPressed: () async {
+                        Map<String> novedades = novedadesGet();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    detalleDescuentos("novedades")));
+                      })
                 ],
               ),
             ),
@@ -182,5 +199,44 @@ class _InicioState extends State<Inicio> {
                 alignment: Alignment.center),
           ]),
         )));
+  }
+}
+
+class detalleDescuentos extends StatelessWidget {
+  final String novedades;
+  detalleDescuentos(this.novedades, {super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 141, 26, 74),
+        ),
+        body: Container(
+          child: Column(children: [
+            Container(
+              margin: const EdgeInsets.only(top: 25, bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Detalles descuentos",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30))
+                ],
+              ),
+            ),
+          ]),
+        ));
+  }
+}
+
+//*********************Peticion GET para las novedades */
+Future<Map<String,dynamic>> novedadesGet() async {
+  final url =
+      'https://tienda-ropa-27af7-default-rtdb.firebaseio.com/novedades.json';
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  } else {
+    throw Exception('No se puedo hacer el get');
   }
 }
