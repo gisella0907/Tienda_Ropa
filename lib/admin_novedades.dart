@@ -35,8 +35,12 @@ class _AdministrarNovedadesState extends State<AdministrarNovedades> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
-                                onPressed: () => ({}),
-                                icon: Icon(Icons.arrow_circle_right_outlined)),
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditNovedad(novedad))),
+                                icon: Icon(Icons.edit)),
                             Text(novedad.descripcion)
                           ],
                         ),
@@ -47,3 +51,54 @@ class _AdministrarNovedadesState extends State<AdministrarNovedades> {
         ));
   }
 }
+
+class EditNovedad extends StatelessWidget {
+  Novedades _novedades;
+  EditNovedad(this._novedades);
+
+  final _formKey = GlobalKey<FormState>();
+          
+  final TextEditingController estadoController = TextEditingController();
+  final TextEditingController descripcionController = TextEditingController();
+      
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+       
+      appBar: AppBar(
+        backgroundColor: Colors.orange[300],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(children: [
+          Container(
+            margin: const EdgeInsets.only(top: 25, bottom: 20),
+          ),
+          const Text("Detalle Tareas",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
+          Container(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: descripcionController,
+                    ),
+                    TextFormField(                      
+                      controller: estadoController,
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ]),
+      ),
+    );
+  }
+}
+

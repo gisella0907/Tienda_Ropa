@@ -20,7 +20,6 @@ Future<Map<String, dynamic>> getProductsData() async {
 }
 
 Future<List<Novedades>> getNovedadesData() async {
-  List<Novedades> data = [];
   var url =
       "https://tienda-ropa-27af7-default-rtdb.firebaseio.com/novedades.json";
   final response = await http.get(Uri.parse(url));
@@ -30,16 +29,16 @@ Future<List<Novedades>> getNovedadesData() async {
     if (datos is Map) {
       datos = datos.values.toList();
     }
-    List<Novedades> registros = [];
+    List<Novedades> listNovedades = [];
     for (var i = 0; i < datos.length; i++) {
-      Novedades prueba = Novedades(
+      Novedades registros = Novedades(
           id: ids[i],
           descripcion: datos[i]['descripcion'],
           estado: datos[i]['estado'],
           imagen: datos[i]['imagen']);
-      registros.add(prueba);
+      listNovedades.add(registros);
     }
-    return registros;
+    return listNovedades;
   } else {
     throw Exception('Peticion no valida');
   }
