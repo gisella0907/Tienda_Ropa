@@ -36,7 +36,7 @@ class _RegistroState extends State<Registro> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white, toolbarHeight: 30, elevation: 0),
+          backgroundColor: Colors.white, toolbarHeight: 30, elevation: 0),
       body: SingleChildScrollView(
         child: Center(
             child:
@@ -293,7 +293,8 @@ class _RegistroState extends State<Registro> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => SingUp()),
+                                MaterialPageRoute(
+                                    builder: (context) => SingUp()),
                               );
                             },
                             child: const Text(
@@ -311,6 +312,8 @@ class _RegistroState extends State<Registro> {
     );
   }
 }
+
+//String dropdownValue = "";
 
 class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({super.key});

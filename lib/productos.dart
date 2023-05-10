@@ -4,6 +4,11 @@ import 'package:tienda_ropa/inicio.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
 import 'package:tienda_ropa/detalle_compra.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'dart:async';
+import 'package:tienda_ropa/funcionalidades/leerqr.dart';
 
 class Productos extends StatefulWidget {
   const Productos({super.key});
@@ -14,12 +19,45 @@ class Productos extends StatefulWidget {
 
 class _ProductosState extends State<Productos> {
   var _isSelected = [false, false, false, false];
+  String _scanBarcode = 'Unknown';
+
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+      print(barcodeScanRes);
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LeerQR(_scanBarcode)),
+      );
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _scanBarcode = barcodeScanRes;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
+    const phone = '+573142506683'; // Número de teléfono
+    const message = 'Conocer mas info acerca de un producto'; // Mensaje
+    final Uri whatsApp =
+        Uri.parse('whatsapp://send?phone=$phone&text=$message');
+
     return Scaffold(
-        drawer: Drawer(          
+        drawer: Drawer(
           backgroundColor: Colors.white,
           child: Column(
             children: [
@@ -64,18 +102,19 @@ class _ProductosState extends State<Productos> {
                     leading: Icon(
                       Icons.home,
                       color: _isSelected[0]
-                          ? Color.fromARGB(255, 141, 26, 74)
+                          ? const Color.fromARGB(255, 141, 26, 74)
                           : Colors.grey,
                     ),
                     title: const Text('Inicio'),
                     // tileColor: Colors.amber,
-                    tileColor:
-                        _isSelected[0] ? Color.fromARGB(26, 244, 4, 4) : null,
+                    tileColor: _isSelected[0]
+                        ? const Color.fromARGB(26, 244, 4, 4)
+                        : null,
                     onTap: () {
                       setState(() => _isSelected[0] = !_isSelected[0]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
+                        MaterialPageRoute(builder: (context) => const Inicio()),
                       );
                     },
                   ),
@@ -83,12 +122,13 @@ class _ProductosState extends State<Productos> {
                     leading: Icon(
                       Icons.library_books_rounded,
                       color: _isSelected[1]
-                          ? Color.fromARGB(255, 141, 26, 74)
+                          ? const Color.fromARGB(255, 141, 26, 74)
                           : Colors.grey,
                     ),
                     title: const Text('Productos'),
-                    tileColor:
-                        _isSelected[1] ? Color.fromARGB(26, 244, 4, 4) : null,
+                    tileColor: _isSelected[1]
+                        ? const Color.fromARGB(26, 244, 4, 4)
+                        : null,
                     onTap: () {
                       setState(() => _isSelected[1] = !_isSelected[1]);
                     },
@@ -98,25 +138,27 @@ class _ProductosState extends State<Productos> {
                     leading: Icon(
                       Icons.exit_to_app,
                       color: _isSelected[2]
-                          ? Color.fromARGB(255, 141, 26, 74)
+                          ? const Color.fromARGB(255, 141, 26, 74)
                           : Colors.grey,
                     ),
                     onTap: () {
                       setState(() => _isSelected[2] = !_isSelected[2]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Principal()),
+                        MaterialPageRoute(
+                            builder: (context) => const Principal()),
                       );
                     },
-                    tileColor:
-                        _isSelected[2] ? Color.fromARGB(26, 244, 4, 4) : null,
+                    tileColor: _isSelected[2]
+                        ? const Color.fromARGB(26, 244, 4, 4)
+                        : null,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   ListTile(
                     leading: Icon(
                       Icons.settings,
                       color: _isSelected[3]
-                          ? Color.fromARGB(255, 141, 26, 74)
+                          ? const Color.fromARGB(255, 141, 26, 74)
                           : Colors.grey,
                     ),
                     title: const Text('Administrar'),
@@ -124,11 +166,13 @@ class _ProductosState extends State<Productos> {
                       setState(() => _isSelected[3] = !_isSelected[3]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdministrarProductos()),
+                        MaterialPageRoute(
+                            builder: (context) => const AdministrarProductos()),
                       );
                     },
-                    tileColor:
-                        _isSelected[3] ? Color.fromARGB(26, 244, 4, 4) : null,
+                    tileColor: _isSelected[3]
+                        ? const Color.fromARGB(26, 244, 4, 4)
+                        : null,
                   ),
                 ],
               )),
@@ -136,50 +180,50 @@ class _ProductosState extends State<Productos> {
           ),
         ),
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 141, 26, 74),
+          backgroundColor: const Color.fromARGB(255, 141, 26, 74),
         ),
         body: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            margin: const EdgeInsets.only(top: 20, bottom: 20), 
+            margin: const EdgeInsets.only(top: 20, bottom: 20),
             child: Column(children: [
               Image.asset("images/LogoLG.png", height: 130),
               Container(
                 child:
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Text(
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  const Text(
                     '     Productos',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
-                    icon: Icon(Icons.qr_code),
-                    color: Color.fromARGB(255, 141, 26, 74),
-                    onPressed: () {
-                      
-                    },
-                  ),
+                      icon: const Icon(Icons.qr_code),
+                      color: const Color.fromARGB(255, 141, 26, 74),
+                      onPressed: () => {
+                            scanQR(),
+                          }),
                   IconButton(
-                    icon: Icon(Icons.shopping_cart),
-                    color: Color.fromARGB(255, 141, 26, 74),
+                    icon: const Icon(Icons.shopping_cart),
+                    color: const Color.fromARGB(255, 141, 26, 74),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DetalleCompra()),
+                        MaterialPageRoute(
+                            builder: (context) => const DetalleCompra()),
                       );
                     },
                   ),
                 ]),
               ),
+              // ignore: avoid_unnecessary_containers
               Container(
-                  child: Row(children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Divider(
-                        thickness: 2,
-                        color: Colors.black,
-                      )
-                   ),
+                  child: Row(children: const [
+                SizedBox(width: 10),
+                Expanded(
+                    child: Divider(
+                  thickness: 2,
+                  color: Colors.black,
+                )),
                 Expanded(
                     child: Divider(
                   thickness: 2,
@@ -193,17 +237,21 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Short Jean', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            const Text('Short Jean',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda1.png'),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -213,10 +261,10 @@ class _ProductosState extends State<Productos> {
                                 bottom: 0,
                                 right: 23,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -229,14 +277,18 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Chaqueta efecto cuero', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            const Text('Chaqueta efecto cuero',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda3.png'),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
                                   ),
@@ -249,10 +301,10 @@ class _ProductosState extends State<Productos> {
                                 bottom: 0,
                                 right: 23,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -269,14 +321,18 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Camisa polo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            const Text('Camisa polo',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda2.png'),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
                                   ),
@@ -289,10 +345,10 @@ class _ProductosState extends State<Productos> {
                                 bottom: 0,
                                 right: 23,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -305,14 +361,18 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Chaqueta beisbolera azul', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            const Text('Chaqueta beisbolera azul',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda4.png'),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
                                   ),
@@ -325,10 +385,10 @@ class _ProductosState extends State<Productos> {
                                 bottom: 0,
                                 right: 23,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -345,14 +405,18 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Crop top', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            const Text('Crop top',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda5.png'),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
                                   ),
@@ -365,10 +429,10 @@ class _ProductosState extends State<Productos> {
                                 bottom: 0,
                                 right: 23,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -381,14 +445,18 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Chaqueta beisbolera beige', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            const Text('Chaqueta beisbolera beige',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda6.png'),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
                                   ),
@@ -401,10 +469,10 @@ class _ProductosState extends State<Productos> {
                                 bottom: 0,
                                 right: 23,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -422,19 +490,19 @@ class _ProductosState extends State<Productos> {
                 margin: const EdgeInsets.only(top: 0.5, bottom: 20),
               ),
               TextButton(
-                onPressed: () {
-                 
-                },
+                onPressed: (() async {
+                  launchUrl(whatsApp);
+                }),
                 style: TextButton.styleFrom(
                   foregroundColor:
-                      Color.fromARGB(255, 18, 196, 71), // foreground
-                  shape: RoundedRectangleBorder(
+                      const Color.fromARGB(255, 18, 196, 71), // foreground
+                  shape: const RoundedRectangleBorder(
                       side: BorderSide(
                         width: 1,
                         color: Color.fromARGB(255, 18, 196, 71),
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  fixedSize: Size(325, 45),
+                  fixedSize: const Size(325, 45),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -444,9 +512,9 @@ class _ProductosState extends State<Productos> {
                       width: 24.0,
                       height: 24.0,
                     ),
-                    SizedBox(
+                    const SizedBox(
                         width: 8.0), // Separación entre la imagen y el texto
-                    Text(
+                    const Text(
                       'Contacto',
                       style: TextStyle(fontSize: 16.0),
                     ),
@@ -458,7 +526,6 @@ class _ProductosState extends State<Productos> {
               ),
             ]),
           ),
-        )
-      );
+        ));
   }
 }
