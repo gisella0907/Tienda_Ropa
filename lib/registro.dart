@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tienda_ropa/iniciar_sesion.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const List<String> list = <String>[
   'Hombre',
@@ -8,6 +11,8 @@ const List<String> list = <String>[
   'Prefiero no decirlo',
   'Otro'
 ];
+
+String dropdownValue = list.first;
 
 class Registro extends StatefulWidget {
   const Registro({super.key});
@@ -18,6 +23,13 @@ class Registro extends StatefulWidget {
 
 class _RegistroState extends State<Registro> {
   TextEditingController dateinput = TextEditingController();
+  TextEditingController nombreController = TextEditingController();
+  final TextEditingController fechaNacController = TextEditingController();
+  final TextEditingController sexoController = TextEditingController();
+  final TextEditingController emailRController = TextEditingController();
+  final TextEditingController passRController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
+
   bool passwordVisible = false;
   bool confirmPasswordVisible = false;
 
@@ -36,7 +48,7 @@ class _RegistroState extends State<Registro> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white, toolbarHeight: 30, elevation: 0),
+          backgroundColor: Colors.white, toolbarHeight: 30, elevation: 0),
       body: SingleChildScrollView(
         child: Center(
             child:
@@ -72,8 +84,32 @@ class _RegistroState extends State<Registro> {
                           )
                         ],
                       ),
-                      const TextField(
+                      TextField(
+                        controller: nombreController,
                         decoration: InputDecoration(hintText: 'ejemplo'),
+                        //  obscureText: false,
+                      )
+                    ],
+                  )),
+                  Container(
+                      child: Column(
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(Icons.account_circle_outlined),
+                          SizedBox(
+                              width:
+                                  10), //separacion entre los elementos de row
+                          Text(
+                            "Número de Identificación",
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 141, 26, 74)),
+                          )
+                        ],
+                      ),
+                      TextField(
+                        controller: idController,
+                        decoration: InputDecoration(hintText: '1012332456'),
                         //  obscureText: false,
                       )
                     ],
@@ -177,7 +213,8 @@ class _RegistroState extends State<Registro> {
                           )
                         ],
                       ),
-                      const TextField(
+                      TextField(
+                        controller: emailRController,
                         decoration:
                             InputDecoration(hintText: 'ejemplo@email.com'),
                         //  obscureText: false,
@@ -201,6 +238,7 @@ class _RegistroState extends State<Registro> {
                         ],
                       ),
                       TextField(
+                        controller: passRController,
                         obscureText: passwordVisible,
                         decoration: InputDecoration(
                             hintText: "Password",
@@ -272,11 +310,40 @@ class _RegistroState extends State<Registro> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SingUp()),
-                        );
+                      onPressed: () async {
+                        try {
+                          print(dropdownValue);
+                          Map<String, dynamic> userData = await getUserRegistro(
+                              nombreController.text,
+                              dateinput.text,
+                              dropdownValue,
+                              idController.text,
+                              emailRController.text,
+                              passRController.text);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SingUp()),
+                          );
+                        } catch (e) {
+                          print('Error al crear el usuario: $e');
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Error al crear el usuario: '),
+                                content: Text('$e'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Aceptar'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
                       child: const Text("Continuar "),
                     ),
@@ -293,7 +360,8 @@ class _RegistroState extends State<Registro> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => SingUp()),
+                                MaterialPageRoute(
+                                    builder: (context) => SingUp()),
                               );
                             },
                             child: const Text(
@@ -320,7 +388,7 @@ class DropdownButtonExample extends StatefulWidget {
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  String dropdownValue = list.first;
+  //dropdownValue = list.first;
 
   @override
   Widget build(BuildContext context) {
@@ -355,30 +423,56 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   }
 }
 
-/*
-Container(
-                  margin: const EdgeInsets.all(20),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      // labelText: "Nama Lengkap",
-                      hintText: "Nama Lengkap",
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Colors.grey), //<-- SEE HERE
-                      ),
-                    ),
-                  ))
-*/
-/*
-ElevatedButton(
-  onPressed: () {},
-  style: ElevatedButton.styleFrom(
-    primary: Colors.black, // Background color
-    onPrimary: Colors.amber, // Text Color (Foreground color)
-  ),
-  child: const Text(
-    'Elevated Button',
-    style: TextStyle(fontSize: 40),
-  ),
-)
-*/
+//***********************Registro API
+Future<Map<String, dynamic>> getUserRegistro(String nombre, String fechaNac,
+    String sexo, String documentoId, String email, String password) async {
+  // Formateador para la fecha de entrada
+  var formatoEntrada = DateFormat('yyyy-MM-dd');
+  // Formateador para la fecha de salida
+  var formatoSalida = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+  // Parsear la fecha de entrada
+  var fechaEntrada = formatoEntrada.parse(fechaNac);
+  // Formatear la fecha de salida
+  var fechaSalida = formatoSalida.format(fechaEntrada);
+  //Validar que el usuario no exista
+  var url =
+      "https://tienda-ropa-27af7-default-rtdb.firebaseio.com/usuarios.json?orderBy=\"correo\"&equalTo=\"${email}\"";
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    var respJs = json.decode(response.body);
+    if (respJs is Map && respJs.isEmpty) {
+      //Crear usuario
+      var urlRegistro = Uri.parse(
+          'https://tienda-ropa-27af7-default-rtdb.firebaseio.com/usuarios.json');
+      final respRegistro = await http.post(urlRegistro,
+          body: json.encode({
+            "correo": email,
+            "documentoId": documentoId,
+            "fechaNacimiento": fechaSalida,
+            "nombres": nombre,
+            "pass": password,
+            "sexo": sexo,
+            "tipo": "cliente"
+          }),
+          headers: {'Content-Type': 'application/json'});
+      if (respRegistro.statusCode == 200) {
+        return json.decode(respRegistro.body);
+      } else {
+        throw Exception('Ha ocurrido un error, por favor intente de nuevo');
+      }
+    } else {
+      var respJs = json.decode(response.body);
+      var emailResp = respJs.values.first['correo'];
+      var IdResp = respJs.values.first['documentoId'];
+      /*SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('tipoUsuario', tipoResp);*/
+      if (email == emailResp || documentoId == IdResp) {
+        throw Exception('El usuario ha sido registrado antes');
+      } else {
+        return json.decode(respJs.body);
+      }
+    }
+  } else {
+    throw Exception('Ha ocurrido un error, por favor intente de nuevo');
+  }
+}

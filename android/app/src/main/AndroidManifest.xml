@@ -1,9 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tienda_ropa">
+    package="com.utadeo.apps.tienda_ropa">
    <application
         android:label="tienda_ropa"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Se usa para autenticación google -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBnofPAEjvJlZdIojT1iKAtLw6p9Uwkihk" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "599772773648",
+    "firebase_url": "https://tienda-ropa-27af7-default-rtdb.firebaseio.com",
+    "project_id": "tienda-ropa-27af7",
+    "storage_bucket": "tienda-ropa-27af7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599772773648:android:40549d29aec3bd29c93995",
+        "android_client_info": {
+          "package_name": "com.utadeo.apps.tienda_ropa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599772773648-o8fc05vubk4ph5ri0akpht50pvonveci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnofPAEjvJlZdIojT1iKAtLw6p9Uwkihk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "599772773648-8qfdl1gt5fh8lgkpgdh4dvsuda2kbp1e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
