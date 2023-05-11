@@ -8,6 +8,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
+
 //import 'package:flutter/material.dart';
 
 //Instanciar para autenticación google
@@ -122,9 +125,12 @@ class _SingUp extends State<SingUp> {
                     try {
                       Map<String, dynamic> userData = await getUserData(
                           emailController.text, passController.text);
+
+                      List<Novedades> novedades = await getNovedadesData();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
+                        MaterialPageRoute(
+                            builder: (context) => Inicio(novedades)),
                       );
                     } catch (e) {
                       print('Error al obtener los datos del usuario: $e');
@@ -176,9 +182,11 @@ class _SingUp extends State<SingUp> {
                       // El usuario inició sesión con éxito
                       print(
                           'El usuario ${userCredential.user!.displayName} inició sesión con éxito');
+                      List<Novedades> novedades = await getNovedadesData();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
+                        MaterialPageRoute(
+                            builder: (context) => Inicio(novedades)),
                       );
                     } else {
                       // Hubo un error al iniciar sesión
@@ -234,9 +242,10 @@ class _SingUp extends State<SingUp> {
               onPressed: () async {
                 bool isAuthenticated = await _authenticate();
                 if (isAuthenticated) {
+                  List<Novedades> novedades = await getNovedadesData();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Inicio()),
+                    MaterialPageRoute(builder: (context) => Inicio(novedades)),
                   );
                 }
               },

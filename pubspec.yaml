@@ -31,7 +31,6 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.8
   google_sign_in: ^5.2.1
-
   flutter:
     sdk: flutter
 
@@ -42,15 +41,20 @@ dependencies:
   firebase_auth: ^4.4.2
   local_auth: ^2.1.6
   firebase_core: ^2.11.0
+  #flutter_barcode_scanner: ^2.0.0
+  qr_flutter: ^4.0.0
+  flutter_barcode_scanner: ^2.0.0
+  #qr_code_scanner: ^1.0.1
+  #ps_flutter_barcode_scanner: ^1.0.1
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   intl: ^0.17.0
-  url_launcher: ^6.1.6
-  flutter_barcode_scanner: ^2.0.0
-  qr_flutter: ^4.0.0
+  url_launcher: ^6.1.6  
+  #flutter_barcode_scanner: ^2.0.0
+  #qr_flutter: ^4.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

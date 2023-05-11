@@ -1,11 +1,21 @@
 //mateapp
 import 'package:flutter/material.dart';
+import 'package:tienda_ropa/models/novedades_response.dart';
 import 'package:tienda_ropa/productos.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tienda_ropa/admin_novedades.dart';
+/*Para acceder a la variable tipoUsuario
+SharedPreferences prefs = await SharedPreferences.getInstance();
+String tipoAlmacenado = prefs.getString('tipoUsuario');*/
 
 class Inicio extends StatefulWidget {
-  const Inicio({super.key});
+  Inicio(this.novedades,{super.key});
+  List<Novedades> novedades;
 
   @override
   State<Inicio> createState() => _InicioState();
@@ -18,7 +28,7 @@ class _InicioState extends State<Inicio> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-        drawer: Drawer(          
+        drawer: Drawer(
           backgroundColor: Colors.white,
           child: Column(
             children: [
@@ -119,12 +129,15 @@ class _InicioState extends State<Inicio> {
                           : Colors.grey,
                     ),
                     title: const Text('Administrar'),
-                    onTap: () {
+                    onTap: () async {
+                      /*List<String, dynamic> products = await getProductsData();
                       setState(() => _isSelected[3] = !_isSelected[3]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdministrarProductos()),
-                      );
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                AdministrarProductos(products)),
+                      );*/
                     },
                     tileColor:
                         _isSelected[3] ? Color.fromARGB(26, 244, 4, 4) : null,
@@ -138,51 +151,64 @@ class _InicioState extends State<Inicio> {
           backgroundColor: Color.fromARGB(255, 141, 26, 74),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 25,bottom: 20),
+            child: Container(
+          color: Colors.white,
+          child: Column(children: [
+            Container(
+                margin: const EdgeInsets.only(top: 25, bottom: 20),
                 child: Image.asset("images/LogoLG.png", height: 130),
-                alignment: Alignment.center
+                alignment: Alignment.center),
+            Container(
+              //margin: const EdgeInsets.only(top: 1,bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("  Inicio",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                  IconButton(
+                      icon: Icon(Icons.edit,
+                          color: Color.fromARGB(255, 141, 26, 74), size: 30),
+                      onPressed: () async {
+                        List<Novedades> novedades =
+                            await getNovedadesData();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AdministrarNovedades(novedades)),
+                        );
+                      })
+                ],
               ),
-              Container(
-                //margin: const EdgeInsets.only(top: 1,bottom: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("  Inicio", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-                    ],
-                  ),
-              ),
-              Container(
-                  child: Row(children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Divider(
-                        thickness: 2,
-                        color: Colors.black,
-                      )
-                   ),
-                Expanded(
-                    child: Divider(
-                  thickness: 2,
-                )),
-              ])),
-              Container(
-                margin: const EdgeInsets.only(top: 25,bottom: 20),
-                child: Image.asset("images/novedad1.png"),
-                alignment: Alignment.center
-              ),Container(
-                margin: const EdgeInsets.only(top: 25,bottom: 20),
-                child: Image.asset("images/novedad2.png"),
-                alignment: Alignment.center
-              ),   
-            ]
-          ),
-        )
-        )
-        );
+            ),
+            Container(
+                child: Row(children: [
+              SizedBox(width: 10),
+              Expanded(
+                  child: Divider(
+                thickness: 2,
+                color: Colors.black,
+              )),
+              Expanded(
+                  child: Divider(
+                thickness: 2,
+              )),
+            ])),
+            Column(
+              children: widget.novedades.map((novedad){
+                if (novedad.estado == true) {
+                  return Container(
+                    margin: const EdgeInsets.only(top: 25, bottom: 20),
+                    child: Image.network(novedad.imagen),
+                    alignment: Alignment.center
+                  );
+                }else{
+                  return Container();
+                }
+              }).toList(),
+            ),
+          ]),
+        )));
   }
 }

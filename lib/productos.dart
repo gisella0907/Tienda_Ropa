@@ -5,6 +5,8 @@ import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
 import 'package:tienda_ropa/detalle_compra.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -72,7 +74,7 @@ class _ProductosState extends State<Productos> {
               Expanded(
                   child: Column(
                 children: [
-                  ListTile(
+                   ListTile(
                     leading: Icon(
                       Icons.home,
                       color: _isSelected[0]
@@ -83,11 +85,13 @@ class _ProductosState extends State<Productos> {
                     // tileColor: Colors.amber,
                     tileColor:
                         _isSelected[0] ? Color.fromARGB(26, 244, 4, 4) : null,
-                    onTap: () {
+                    onTap: () async{
+                      List<Novedades> novedades =
+                            await getNovedadesData();
                       setState(() => _isSelected[0] = !_isSelected[0]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
+                        MaterialPageRoute(builder: (context) => Inicio(novedades)),
                       );
                     },
                   ),
