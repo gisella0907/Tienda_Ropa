@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'objects/productos_id.dart';
 import 'package:tienda_ropa/inicio.dart';
 import 'package:tienda_ropa/productos.dart';
+import 'package:tienda_ropa/models/productos_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class DetalleCompra extends StatefulWidget {
+  /*DetalleCompra(this.carritoCompra {super.key});
+  List<Novedades> carritoCompra;*/
   const DetalleCompra({super.key});
-
   @override
   State<DetalleCompra> createState() => _DetalleCompraState();
 }
@@ -40,10 +43,13 @@ class _DetalleCompraState extends State<DetalleCompra> {
               Expanded(
                 child: Container(
                   child: IconButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      List<ProductosList> productos =
+                            await getProductsData();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Productos()),
+                        MaterialPageRoute(
+                            builder: (context) => Productos(productos)),
                       );
                     },
                     icon: const Icon(Icons.arrow_back),

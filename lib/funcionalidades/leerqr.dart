@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tienda_ropa/funcionalidades/crearqr.dart';
 import 'package:tienda_ropa/productos.dart';
+import 'package:tienda_ropa/models/productos_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class LeerQR extends StatefulWidget {
   final String scanBarcode;
@@ -55,11 +57,13 @@ class _LeerQRState extends State<LeerQR> {
               Expanded(
                 child: Container(
                   child: IconButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      List<ProductosList> productos =
+                            await getProductsData();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Productos()),
+                            builder: (context) => Productos(productos)),
                       );
                     },
                     icon: const Icon(Icons.arrow_back),

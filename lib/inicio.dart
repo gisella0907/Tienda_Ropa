@@ -1,6 +1,7 @@
 //mateapp
 import 'package:flutter/material.dart';
 import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/models/productos_response.dart';
 import 'package:tienda_ropa/productos.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
@@ -94,11 +95,14 @@ class _InicioState extends State<Inicio> {
                     title: const Text('Productos'),
                     tileColor:
                         _isSelected[1] ? Color.fromARGB(26, 244, 4, 4) : null,
-                    onTap: () {
+                    onTap: () async{
                       setState(() => _isSelected[1] = !_isSelected[1]);
+                      List<ProductosList> productos =
+                            await getProductsData();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Productos()),
+                        MaterialPageRoute(
+                            builder: (context) => Productos(productos)),
                       );
                     },
                   ),

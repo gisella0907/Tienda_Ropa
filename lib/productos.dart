@@ -6,6 +6,7 @@ import 'package:tienda_ropa/admin_productos.dart';
 import 'package:tienda_ropa/detalle_compra.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/models/productos_response.dart';
 import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 import 'package:flutter/services.dart';
@@ -14,7 +15,8 @@ import 'dart:async';
 //import 'package:tienda_ropa/funcionalidades/leerqr.dart';
 
 class Productos extends StatefulWidget {
-  const Productos({super.key});
+  Productos(this.productos, {super.key});
+  List<ProductosList> productos;
 
   @override
   State<Productos> createState() => _ProductosState();
@@ -22,18 +24,20 @@ class Productos extends StatefulWidget {
 
 class _ProductosState extends State<Productos> {
   var _isSelected = [false, false, false, false];
+  List<ProductosList> carritoCompra = [];
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     //Funcionalidad Whatsapp
     const phone = '+573142506683'; // Número de teléfono
-    const message = 'Hola! Deseo obtener más información sobre un producto'; // Mensaje
+    const message =
+        'Hola! Deseo obtener más información sobre un producto'; // Mensaje
     final Uri whatsApp =
         Uri.parse('whatsapp://send?phone=$phone&text=$message');
 
     return Scaffold(
-        drawer: Drawer(          
+        drawer: Drawer(
           backgroundColor: Colors.white,
           child: Column(
             children: [
@@ -74,7 +78,7 @@ class _ProductosState extends State<Productos> {
               Expanded(
                   child: Column(
                 children: [
-                   ListTile(
+                  ListTile(
                     leading: Icon(
                       Icons.home,
                       color: _isSelected[0]
@@ -85,13 +89,13 @@ class _ProductosState extends State<Productos> {
                     // tileColor: Colors.amber,
                     tileColor:
                         _isSelected[0] ? Color.fromARGB(26, 244, 4, 4) : null,
-                    onTap: () async{
-                      List<Novedades> novedades =
-                            await getNovedadesData();
+                    onTap: () async {
+                      List<Novedades> novedades = await getNovedadesData();
                       setState(() => _isSelected[0] = !_isSelected[0]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Inicio(novedades)),
+                        MaterialPageRoute(
+                            builder: (context) => Inicio(novedades)),
                       );
                     },
                   ),
@@ -140,7 +144,8 @@ class _ProductosState extends State<Productos> {
                       setState(() => _isSelected[3] = !_isSelected[3]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdministrarProductos()),
+                        MaterialPageRoute(
+                            builder: (context) => AdministrarProductos()),
                       );
                     },
                     tileColor:
@@ -157,12 +162,12 @@ class _ProductosState extends State<Productos> {
         body: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            margin: const EdgeInsets.only(top: 20, bottom: 20), 
+            margin: const EdgeInsets.only(top: 20, bottom: 20),
             child: Column(children: [
               Image.asset("images/LogoLG.png", height: 130),
               Container(
                 child:
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   Text(
                     '     Productos',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
@@ -171,9 +176,7 @@ class _ProductosState extends State<Productos> {
                   IconButton(
                     icon: Icon(Icons.qr_code),
                     color: Color.fromARGB(255, 141, 26, 74),
-                    onPressed: () {
-                      
-                    },
+                    onPressed: () {},
                   ),
                   IconButton(
                     icon: Icon(Icons.shopping_cart),
@@ -181,7 +184,9 @@ class _ProductosState extends State<Productos> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DetalleCompra()),
+                        MaterialPageRoute(
+                            //builder: (context) => DetalleCompra(carritoCompra)),
+                            builder: (context) => DetalleCompra()),
                       );
                     },
                   ),
@@ -189,27 +194,69 @@ class _ProductosState extends State<Productos> {
               ),
               Container(
                   child: Row(children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Divider(
-                        thickness: 2,
-                        color: Colors.black,
-                      )
-                   ),
+                SizedBox(width: 10),
+                Expanded(
+                    child: Divider(
+                  thickness: 2,
+                  color: Colors.black,
+                )),
                 Expanded(
                     child: Divider(
                   thickness: 2,
                 )),
               ])),
               Container(
-                  child: Table(
+                margin: const EdgeInsets.only(top: 25, bottom: 20),
+                child: Column(
+                  children: widget.productos.map((producto) {
+                    if (producto.estado == true) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.network(producto.imagen),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            child: IconButton(
+                              icon: Icon(Icons.add_circle),
+                              color: Color.fromARGB(255, 141, 26, 74),
+                              onPressed: () {
+                                onPressed: () {
+                                  carritoCompra.add(producto);
+                                };
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: IconButton(
+                              icon: Icon(Icons.help),
+                              color: Color.fromARGB(255, 141, 26, 74),
+                              onPressed: () {
+                                // Acción del botón de información
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }).toList(),
+                ),
+                /*child: Table(
                 children: [
                   TableRow(
                     children: [
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Short Jean', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            Text('Short Jean',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda1.png'),
                               Positioned(
@@ -219,7 +266,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.help,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -232,7 +279,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -245,7 +292,11 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Chaqueta efecto cuero', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            Text('Chaqueta efecto cuero',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda3.png'),
                               Positioned(
@@ -268,7 +319,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -285,7 +336,11 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Camisa polo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            Text('Camisa polo',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda2.png'),
                               Positioned(
@@ -308,7 +363,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -321,7 +376,11 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Chaqueta beisbolera azul', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            Text('Chaqueta beisbolera azul',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda4.png'),
                               Positioned(
@@ -344,7 +403,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -361,7 +420,11 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Crop top', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            Text('Crop top',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda5.png'),
                               Positioned(
@@ -384,7 +447,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -397,7 +460,11 @@ class _ProductosState extends State<Productos> {
                       TableCell(
                         child: Column(
                           children: [
-                            Text('Chaqueta beisbolera beige', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromARGB(255, 87, 83, 85))),
+                            Text('Chaqueta beisbolera beige',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
                             Stack(children: [
                               Image.asset('images/prenda6.png'),
                               Positioned(
@@ -420,7 +487,7 @@ class _ProductosState extends State<Productos> {
                                   icon: Icon(
                                     Icons.add_circle,
                                     color: Color.fromARGB(255, 141, 26, 74),
-                                  ),                                  
+                                  ),
                                   onPressed: () {
                                     // Acción cuando se presiona el icono
                                   },
@@ -433,7 +500,8 @@ class _ProductosState extends State<Productos> {
                     ],
                   ),
                 ],
-              )),
+              )*/
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 0.5, bottom: 20),
               ),
@@ -474,7 +542,6 @@ class _ProductosState extends State<Productos> {
               ),
             ]),
           ),
-        )
-      );
+        ));
   }
 }
