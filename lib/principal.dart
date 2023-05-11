@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_ropa/iniciar_sesion.dart';
 import 'package:tienda_ropa/registro.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'dart:async';
 
 class Principal extends StatefulWidget {
   const Principal({super.key});
@@ -12,6 +17,12 @@ class Principal extends StatefulWidget {
 class _PrincipalState extends State<Principal> {
   @override
   Widget build(BuildContext context) {
+    //Funcionalidad Whatsapp
+    const phone = '+573142506683'; // Número de teléfono
+    const message = 'Hola! Deseo obtener más información sobre un producto'; // Mensaje
+    final Uri whatsApp =
+        Uri.parse('whatsapp://send?phone=$phone&text=$message');
+
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white, toolbarHeight: 0, elevation: 0),
@@ -255,9 +266,9 @@ class _PrincipalState extends State<Principal> {
                 margin: const EdgeInsets.only(top: 0.5, bottom: 20),
               ),
               TextButton(
-                onPressed: () {
-                 
-                },
+                onPressed: (() async {
+                  launchUrl(whatsApp);
+                }),
                 style: TextButton.styleFrom(
                   foregroundColor:
                       Color.fromARGB(255, 18, 196, 71), // foreground

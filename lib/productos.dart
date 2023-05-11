@@ -4,6 +4,12 @@ import 'package:tienda_ropa/inicio.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
 import 'package:tienda_ropa/detalle_compra.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'dart:async';
+//import 'package:tienda_ropa/funcionalidades/leerqr.dart';
 
 class Productos extends StatefulWidget {
   const Productos({super.key});
@@ -18,6 +24,12 @@ class _ProductosState extends State<Productos> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    //Funcionalidad Whatsapp
+    const phone = '+573142506683'; // Número de teléfono
+    const message = 'Hola! Deseo obtener más información sobre un producto'; // Mensaje
+    final Uri whatsApp =
+        Uri.parse('whatsapp://send?phone=$phone&text=$message');
+
     return Scaffold(
         drawer: Drawer(          
           backgroundColor: Colors.white,
@@ -422,9 +434,9 @@ class _ProductosState extends State<Productos> {
                 margin: const EdgeInsets.only(top: 0.5, bottom: 20),
               ),
               TextButton(
-                onPressed: () {
-                 
-                },
+                onPressed: (() async {
+                  launchUrl(whatsApp);
+                }),
                 style: TextButton.styleFrom(
                   foregroundColor:
                       Color.fromARGB(255, 18, 196, 71), // foreground
