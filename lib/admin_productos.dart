@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'objects/productos_id.dart';
 import 'package:tienda_ropa/inicio.dart';
+import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class AdministrarProductos extends StatefulWidget {
   AdministrarProductos(this.products,{super.key});
@@ -39,12 +41,16 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
               Expanded(
                 child: Container(
                   child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
-                      );
-                    },
+                    onPressed: () async {
+                        List<Novedades> novedades =
+                            await getNovedadesData();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Inicio(novedades)),
+                        );
+                      },
                     icon: const Icon(Icons.arrow_back),
                     color: Color.fromRGBO(140, 24, 68, 1),
                   ),

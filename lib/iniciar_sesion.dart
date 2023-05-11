@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_ropa/registro.dart';
 import 'package:tienda_ropa/inicio.dart';
+import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class SingUp extends StatefulWidget {
   const SingUp({super.key});
@@ -129,12 +131,16 @@ class _SingUp extends State<SingUp> {
                       backgroundColor: const Color.fromARGB(255, 141, 26, 74),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
-                      );
-                },
+                  onPressed: () async {
+                        List<Novedades> novedades =
+                            await getNovedadesData();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Inicio(novedades)),
+                        );
+                      },
                   child: const Text("Iniciar Sesión"))),
           Container(
             margin: const EdgeInsets.all(20),

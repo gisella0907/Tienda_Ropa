@@ -4,6 +4,8 @@ import 'package:tienda_ropa/inicio.dart';
 import 'package:tienda_ropa/Principal.dart';
 import 'package:tienda_ropa/admin_productos.dart';
 import 'package:tienda_ropa/detalle_compra.dart';
+import 'package:tienda_ropa/models/novedades_response.dart';
+import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class Productos extends StatefulWidget {
   const Productos({super.key});
@@ -71,11 +73,13 @@ class _ProductosState extends State<Productos> {
                     // tileColor: Colors.amber,
                     tileColor:
                         _isSelected[0] ? Color.fromARGB(26, 244, 4, 4) : null,
-                    onTap: () {
+                    onTap: () async{
+                      List<Novedades> novedades =
+                            await getNovedadesData();
                       setState(() => _isSelected[0] = !_isSelected[0]);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Inicio()),
+                        MaterialPageRoute(builder: (context) => Inicio(novedades)),
                       );
                     },
                   ),

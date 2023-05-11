@@ -14,7 +14,8 @@ SharedPreferences prefs = await SharedPreferences.getInstance();
 String tipoAlmacenado = prefs.getString('tipoUsuario');*/
 
 class Inicio extends StatefulWidget {
-  const Inicio({super.key});
+  Inicio(this.novedades,{super.key});
+  List<Novedades> novedades;
 
   @override
   State<Inicio> createState() => _InicioState();
@@ -194,14 +195,19 @@ class _InicioState extends State<Inicio> {
                 thickness: 2,
               )),
             ])),
-            Container(
-                margin: const EdgeInsets.only(top: 25, bottom: 20),
-                child: Image.asset("images/novedad1.png"),
-                alignment: Alignment.center),
-            Container(
-                margin: const EdgeInsets.only(top: 25, bottom: 20),
-                child: Image.asset("images/novedad2.png"),
-                alignment: Alignment.center),
+            Column(
+              children: widget.novedades.map((novedad){
+                if (novedad.estado == true) {
+                  return Container(
+                    margin: const EdgeInsets.only(top: 25, bottom: 20),
+                    child: Image.network(novedad.imagen),
+                    alignment: Alignment.center
+                  );
+                }else{
+                  return Container();
+                }
+              }).toList(),
+            ),
           ]),
         )));
   }

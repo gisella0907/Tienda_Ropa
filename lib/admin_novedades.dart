@@ -29,11 +29,14 @@ class _AdministrarNovedadesState extends State<AdministrarNovedades> {
                 Expanded(
                   child: Container(
                     child: IconButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        List<Novedades> novedades =
+                            await getNovedadesData();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Inicio()),
+                              builder: (context) =>
+                                  Inicio(novedades)),
                         );
                       },
                       icon: const Icon(Icons.arrow_back),
