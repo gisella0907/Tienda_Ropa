@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'objects/productos_id.dart';
 import 'package:tienda_ropa/inicio.dart';
 import 'package:tienda_ropa/productos.dart';
+import 'package:tienda_ropa/firma_dig/firma_digital.dart';
 
 class DetalleCompra extends StatefulWidget {
   const DetalleCompra({super.key});
@@ -183,7 +184,12 @@ class _DetalleCompraState extends State<DetalleCompra> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+              },
               child: const Text("Confirmar compra "),
             ),
           ),
