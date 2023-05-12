@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tienda_ropa/admin_productos.dart';
 import 'package:http/http.dart' as http;
+import 'package:tienda_ropa/objects/peticionesGet.dart';
+import 'package:tienda_ropa/models/productos_response.dart';
 
 class CrearQR extends StatefulWidget {
   final String id;
@@ -33,14 +35,15 @@ class _CrearQRState extends State<CrearQR> {
                 Expanded(
                   child: Container(
                     child: IconButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        List<ProductosList> product = await getProductsData();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const AdministrarProductos()),
+                                  AdministrarProductos(product)),
                         );
-                      },
+                      },                      
                       icon: const Icon(Icons.arrow_back),
                       color: const Color.fromRGBO(140, 24, 68, 1),
                     ),

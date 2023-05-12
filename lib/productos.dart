@@ -140,12 +140,13 @@ class _ProductosState extends State<Productos> {
                           : Colors.grey,
                     ),
                     title: const Text('Administrar'),
-                    onTap: () {
+                    onTap: () async {
+                      List<ProductosList> product = await getProductsData();
                       setState(() => _isSelected[3] = !_isSelected[3]);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AdministrarProductos()),
+                            builder: (context) => AdministrarProductos(product)),
                       );
                     },
                     tileColor:
