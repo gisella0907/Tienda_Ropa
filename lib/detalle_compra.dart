@@ -109,12 +109,12 @@ class _DetalleCompraState extends State<DetalleCompra> {
             scrollDirection: Axis.horizontal,
             child: Column(
               children: [
-                Container(
-                  child: //SingleChildScrollView(
-                    Row(
+                Column(
+                        children: [
+                          Row(
                             children: [
                               Container(
-                                width: 70,
+                                width: 220,
                                 child: const Text(
                                   "PRODUCTO",
                                   style: TextStyle(
@@ -123,7 +123,7 @@ class _DetalleCompraState extends State<DetalleCompra> {
                                 ),
                               ),
                               Container(
-                                width: 20,
+                                width: 80,
                                 child: const Text(
                                   "UNIDADES",
                                   style: TextStyle(
@@ -134,7 +134,7 @@ class _DetalleCompraState extends State<DetalleCompra> {
                               Container(
                                 width: 50,
                                 child: const Text(
-                                  "EDITAR",
+                                  "",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
@@ -142,6 +142,7 @@ class _DetalleCompraState extends State<DetalleCompra> {
                               ),
                             ],
                           ),
+                        ]
                 ),
                 Column(                  
                     children: widget.carritoCompra
@@ -152,7 +153,7 @@ class _DetalleCompraState extends State<DetalleCompra> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 250,                                    
+                                      width: 220,                                    
                                       child: Text(
                                         carrito.descripcion,
                                         style: const TextStyle(
@@ -161,7 +162,7 @@ class _DetalleCompraState extends State<DetalleCompra> {
                                       ),
                                     ),
                                     Container(
-                                      width: 20,
+                                      width: 80,
                                       child: Text(
                                         carrito.unidades.toString(),
                                         style: const TextStyle(
@@ -170,11 +171,11 @@ class _DetalleCompraState extends State<DetalleCompra> {
                                       ),
                                     ),
                                     Container(
-                                      width: 40,
+                                      width: 50,
                                       child: IconButton(
                                         onPressed: () => {},
                                         icon: const Icon(
-                                          Icons.edit,
+                                          Icons.delete,
                                           color: Color.fromRGBO(140, 24, 68, 1),
                                         ),
                                       ),
