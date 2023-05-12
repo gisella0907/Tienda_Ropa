@@ -188,24 +188,6 @@ class _PrincipalState extends State<Principal> {
                     Container(
                       margin: const EdgeInsets.only(top: 0.5, bottom: 20),
                     ),
-                    TextButton(
-                      onPressed: (() async {
-                        launchUrl(whatsApp);
-                      }),
-                      style: TextButton.styleFrom(
-                        foregroundColor: const Color.fromARGB(
-                            255, 18, 196, 71), // foreground
-                        shape: const RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 18, 196, 71),
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
-                        fixedSize: const Size(325, 45),
-                      ),
-                      child: Container(),
-                    ),
                     Container(
                       margin: const EdgeInsets.only(top: 0.5, bottom: 20),
                     ),
