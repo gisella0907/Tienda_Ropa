@@ -185,8 +185,8 @@ class _ProductosState extends State<Productos> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            //builder: (context) => DetalleCompra(carritoCompra)),
-                            builder: (context) => DetalleCompra()),
+                            builder: (context) => DetalleCompra(carritoCompra)),
+                            //builder: (context) => DetalleCompra()),
                       );
                     },
                   ),
@@ -213,20 +213,7 @@ class _ProductosState extends State<Productos> {
                       return Stack(
                         alignment: Alignment.center,
                         children: [
-                          Image.network(producto.imagen),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: IconButton(
-                              icon: Icon(Icons.add_circle),
-                              color: Color.fromARGB(255, 141, 26, 74),
-                              onPressed: () {
-                                onPressed: () {
-                                  carritoCompra.add(producto);
-                                };
-                              },
-                            ),
-                          ),
+                          Image.network(producto.imagen),                          
                           Positioned(
                             top: 10,
                             right: 10,
@@ -234,8 +221,19 @@ class _ProductosState extends State<Productos> {
                               icon: Icon(Icons.help),
                               color: Color.fromARGB(255, 141, 26, 74),
                               onPressed: () {
-                                // Acción del botón de información
+                                print("detalle");
                               },
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            child: IconButton(                              
+                              icon: Icon(Icons.add_circle),
+                              color: Color.fromARGB(255, 141, 26, 74),
+                                onPressed: () {
+                                  carritoCompra.add(producto);
+                                },                              
                             ),
                           ),
                         ],

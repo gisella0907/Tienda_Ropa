@@ -40,6 +40,13 @@ class _PrincipalState extends State<Principal> {
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

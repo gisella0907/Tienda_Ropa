@@ -6,9 +6,8 @@ import 'package:tienda_ropa/models/productos_response.dart';
 import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class DetalleCompra extends StatefulWidget {
-  /*DetalleCompra(this.carritoCompra {super.key});
-  List<Novedades> carritoCompra;*/
-  const DetalleCompra({super.key});
+  DetalleCompra(this.carritoCompra, {super.key});
+  List<ProductosList> carritoCompra;
   @override
   State<DetalleCompra> createState() => _DetalleCompraState();
 }
@@ -43,9 +42,8 @@ class _DetalleCompraState extends State<DetalleCompra> {
               Expanded(
                 child: Container(
                   child: IconButton(
-                    onPressed: () async{
-                      List<ProductosList> productos =
-                            await getProductsData();
+                    onPressed: () async {
+                      List<ProductosList> productos = await getProductsData();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -75,7 +73,9 @@ class _DetalleCompraState extends State<DetalleCompra> {
           ),
         ),
       ),
-      body: Column(
+      body: SingleChildScrollView(
+          //scrollDirection: Axis.horizontal,
+          child: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(8.0),
@@ -104,79 +104,94 @@ class _DetalleCompraState extends State<DetalleCompra> {
             ),
           ),
           Container(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  const Text("Producto",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  const Text("Unidades",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Container(),
-                ]),
-          ),
-          Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            margin: const EdgeInsets.only(left: 20, right: 20, top: 15),                               
+              child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Column(
               children: [
-                Text('', style: TextStyle(color: Colors.black)),
-                Text(productos[0].nombre,
-                    style: TextStyle(color: Colors.black)),
-                Text(productos[0].unidades.toString(),
-                    style: TextStyle(color: Colors.black)),
-                IconButton(
-                    onPressed: () {},
-                    icon:
-                        Icon(Icons.edit, color: Color.fromRGBO(140, 24, 68, 1)))
+                Container(
+                  child: //SingleChildScrollView(
+                    Row(
+                            children: [
+                              Container(
+                                width: 70,
+                                child: const Text(
+                                  "PRODUCTO",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                width: 20,
+                                child: const Text(
+                                  "UNIDADES",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                width: 50,
+                                child: const Text(
+                                  "EDITAR",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                ),
+                Column(                  
+                    children: widget.carritoCompra
+                        .map((carrito) => Container(
+                                child: Column(
+                              children: [
+                                Row(                                  
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 250,                                    
+                                      child: Text(
+                                        carrito.descripcion,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 20,
+                                      child: Text(
+                                        carrito.unidades.toString(),
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 40,
+                                      child: IconButton(
+                                        onPressed: () => {},
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Color.fromRGBO(140, 24, 68, 1),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 1),
+                                  ],
+                                ),
+                                const Divider(
+                                  thickness: 2,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            )))
+                        .toList()),
               ],
             ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('', style: TextStyle(color: Colors.black)),
-                Text(productos[1].nombre,
-                    style: TextStyle(color: Colors.black)),
-                Text(productos[1].unidades.toString(),
-                    style: TextStyle(color: Colors.black)),
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.edit,
-                        color: Color.fromRGBO(140, 24, 68, 1))),
-              ],
-            ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('', style: TextStyle(color: Colors.black)),
-                Text(productos[1].nombre,
-                    style: TextStyle(color: Colors.black)),
-                Text(productos[1].unidades.toString(),
-                    style: TextStyle(color: Colors.black)),
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.edit,
-                        color: Color.fromRGBO(140, 24, 68, 1))),
-              ],
-            ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('', style: TextStyle(color: Colors.black)),
-                Text(productos[1].nombre,
-                    style: TextStyle(color: Colors.black)),
-                Text(productos[1].unidades.toString(),
-                    style: TextStyle(color: Colors.black)),
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.edit,
-                        color: Color.fromRGBO(140, 24, 68, 1))),
-              ],
-            ),
-            Divider(),
-          ]),
+          )),
           Container(
             height: 50,
             width: screenSize.width - 40,
@@ -194,7 +209,7 @@ class _DetalleCompraState extends State<DetalleCompra> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }
