@@ -8,52 +8,29 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tienda_ropa/funcionalidades/crearqr.dart';
 import 'package:tienda_ropa/models/novedades_response.dart';
 import 'package:tienda_ropa/objects/peticionesGet.dart';
+import 'package:tienda_ropa/models/productos_response.dart';
+import 'package:tienda_ropa/objects/peticionesPut.dart';
+
 
 class AdministrarProductos extends StatefulWidget {
-  const AdministrarProductos({super.key});
+  AdministrarProductos(this.products,{super.key});
+  List<ProductosList> products;
 
   @override
   State<AdministrarProductos> createState() => _AdministrarProductosState();
 }
 
 class _AdministrarProductosState extends State<AdministrarProductos> {
-  bool isChecked = false;
-
-  void _toggleCheckbox() {
-    setState(() {
-      isChecked = !isChecked;
-    });
-  }
-
-  Map<String, dynamic> _productData = {};
-  // Map<String, dynamic> objeto = {};
 
   @override
   void initState() {
     super.initState();
-    _fetchProductData();
   }
 
-  Future<void> _fetchProductData() async {
-    final response = await http.get(Uri.parse(
-        'https://tienda-ropa-27af7-default-rtdb.firebaseio.com/productos.json'));
-
-    if (response.statusCode == 200) {
-      setState(() {
-        _productData = json.decode(response.body);
-        //objeto = _productData['-NV2CtUgzXHye5Q7IfjB'];
-      });
-    } else {
-      throw Exception('Failed to fetch product data');
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     String _searchText = '';
-    Producto miProducto = Producto(nombre: "Cahqueta", unidades: 1);
-    Producto miProducto2 = Producto(nombre: "Short Jeans", unidades: 1);
-    List<Producto> productos = [miProducto, miProducto2];
     final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -152,19 +129,9 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                                     icon: const Icon(Icons.check_box,
                                         color: Color.fromRGBO(140, 24, 68, 1))),
                               ),
-                              Container(
-                                width: 160,
-                                //  color: Colors.grey,
-                                child: const Text(
-                                  "ID",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
                               // const SizedBox(width: 15),
                               Container(
-                                width: 70,
+                                width: 175,
                                 //  color: Colors.cyan,
                                 child: const Text(
                                   "NOMBRE",
@@ -203,8 +170,8 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                           //FINALIZA PRIMERA FILA DE NOMBRES DE LAS COLUMNAS
                           const SizedBox(height: 20),
                           Column(
-                            children: _productData.entries
-                                .map((entry) => Container(
+                            children: widget.products
+                                .map((product) => Container(
                                         child: Column(
                                       children: [
                                         Row(
@@ -214,9 +181,8 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                                             Container(
                                               // color: Colors.cyan,
                                               child: Checkbox(
-                                                value: isChecked,
+                                                value: product.estado,
                                                 onChanged: (value) {
-                                                  _toggleCheckbox();
                                                 },
                                                 activeColor:
                                                     const Color.fromRGBO(
@@ -224,9 +190,9 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                                               ),
                                             ),
                                             Container(
-                                              width: 160,
+                                              width: 175,
                                               child: Text(
-                                                entry.key,
+                                                product.nombre,
                                                 style: const TextStyle(
                                                   color: Colors.black,
                                                 ),
@@ -236,20 +202,7 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                                             Container(
                                               width: 70,
                                               child: Text(
-                                                _productData[entry.key]
-                                                    ['nombre'],
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                            // const SizedBox(width: 15),
-                                            Container(
-                                              width: 70,
-                                              child: Text(
-                                                _productData[entry.key]
-                                                        ['unidades']
-                                                    .toString(),
+                                                product.unidades.toString(),
                                                 style: const TextStyle(
                                                   color: Colors.black,
                                                 ),
@@ -258,7 +211,12 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                                             // const SizedBox(width: 15),
                                             Container(
                                               child: IconButton(
-                                                onPressed: () {},
+                                                onPressed: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditProduct(
+                                                                product))),
                                                 icon: const Icon(
                                                   Icons.edit,
                                                   color: Color.fromRGBO(
@@ -270,7 +228,7 @@ class _AdministrarProductosState extends State<AdministrarProductos> {
                                               child: IconButton(
                                                 onPressed: () {
                                                   navigateToCreateQR(
-                                                      context, entry.key);
+                                                      context, product.id);
                                                 },
                                                 icon: const Icon(
                                                   Icons.qr_code,
@@ -322,4 +280,176 @@ void navigateToCreateQR(BuildContext context, String key) {
     context,
     MaterialPageRoute(builder: (context) => CrearQR(key)),
   );
+}
+
+class EditProduct extends StatefulWidget {
+  ProductosList product;
+  final TextEditingController descripcionController = TextEditingController();
+  final TextEditingController estadoController = TextEditingController();
+  final TextEditingController estiloController = TextEditingController();
+  final TextEditingController garantiaController = TextEditingController();
+  final TextEditingController genVestuarioController = TextEditingController();
+  final TextEditingController imagenController = TextEditingController();
+  final TextEditingController materialController = TextEditingController();
+  final TextEditingController nombreController = TextEditingController();
+  final TextEditingController paisController = TextEditingController();
+  final TextEditingController precioController = TextEditingController();
+  final TextEditingController tallaController = TextEditingController();
+  final TextEditingController unidadesnController = TextEditingController();
+  EditProduct(this.product) {
+    descripcionController.text = product.descripcion;
+    estiloController.text = product.estilo;
+    garantiaController.text = product.garantia;
+    genVestuarioController.text = product.generoVestuario;
+    imagenController.text = product.imagen;
+    materialController.text = product.material;
+    nombreController.text = product.nombre;
+    paisController.text = product.paisOrigen;
+    precioController.text = product.precio.toString();
+    tallaController.text = product.talla;
+    unidadesnController.text = product.unidades.toString();
+  }
+
+  @override
+  State<EditProduct> createState() => _EditProduct();
+}
+
+class _EditProduct extends State<EditProduct> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 141, 26, 74),
+      ),
+      body: SingleChildScrollView(
+        child:       
+        Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(children: [
+          Container(
+            margin: const EdgeInsets.only(top: 25, bottom: 20),
+          ),
+          const Text("Modificar Producto",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
+          Container(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: widget.descripcionController,
+                    ),
+                    TextFormField(
+                      controller: widget.estiloController,
+                    ),
+                    TextFormField(
+                      controller: widget.garantiaController,
+                    ),
+                    TextFormField(
+                      controller: widget.genVestuarioController,
+                    ),
+                    TextFormField(
+                      controller: widget.imagenController,
+                    ),
+                    TextFormField(
+                      controller: widget.materialController,
+                    ),
+                    TextFormField(
+                      controller: widget.nombreController,
+                    ),
+                    TextFormField(
+                      controller: widget.paisController,
+                    ),
+                    TextFormField(
+                      controller: widget.precioController,
+                    ),
+                    TextFormField(
+                      controller: widget.tallaController,
+                    ),
+                    TextFormField(
+                      controller: widget.unidadesnController,
+                    ),
+                    CheckboxListTile(
+                      title: Text('Estado'),
+                      value: widget.product.estado,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          widget.product.estado = value!;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+              height: 50,
+              width: screenSize.width - 40,
+              margin: const EdgeInsets.only(
+                  top: 45, left: 20, right: 20, bottom: 25),
+              child: FilledButton(
+                  style: FilledButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 141, 26, 74),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  onPressed: () async {
+                    var novedadesPut = await updateProductos(
+                        widget.product.id,
+                        widget.descripcionController.text,
+                        widget.estiloController.text,
+                        widget.garantiaController.text,
+                        widget.genVestuarioController.text,
+                        widget.imagenController.text,
+                        widget.materialController.text,
+                        widget.nombreController.text,
+                        widget.paisController.text,
+                        int.parse(widget.precioController.text),
+                        widget.tallaController.text,
+                        int.parse(widget.unidadesnController.text),
+                        widget.product.estado);
+                    if (novedadesPut == "Actualizacion Exitosa") {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                                  title: Text('Actualizacion Exitosa'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        
+                                      },
+                                      child: const Text('Aceptar'),
+                                    ),
+                                  ]));
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Inicio()),
+                      );*/
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                                  title: Text(
+                                      'No se pudo realizar la actualizacion'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('Aceptar'),
+                                    ),
+                                  ]));
+                    }
+                  },
+                  child: const Text("Actualizar"))),
+        ]),
+      ),
+      )
+    );
+  }
 }

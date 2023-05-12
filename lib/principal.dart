@@ -5,8 +5,6 @@ import 'package:tienda_ropa/registro.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:tienda_ropa/funcionalidades/leerqr.dart';
-import 'package:tienda_ropa/models/productos_response.dart';
-import 'package:tienda_ropa/objects/peticionesGet.dart';
 
 class Principal extends StatefulWidget {
   const Principal({super.key});
@@ -17,7 +15,7 @@ class Principal extends StatefulWidget {
 
 class _PrincipalState extends State<Principal> {
   String _scanBarcode = 'Unknown';
-  List<ProductosList> productos = [];
+
   Future<void> scanQR() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -42,16 +40,13 @@ class _PrincipalState extends State<Principal> {
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
+
   }
 
   @override
   void initState() {
-    _fetchProductData();
+    // TODO: implement initState
     super.initState();
-  }
-
-  Future<void> _fetchProductData() async {
-    productos = await getProductsData();
   }
 
   @override
@@ -117,83 +112,213 @@ class _PrincipalState extends State<Principal> {
                     ),
                   ])),
               Container(
-                child: Container(
-                  color: Colors.white,
-                  margin: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Column(children: [
-                    Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Text(
-                              '     Productos',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 25),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              icon: const Icon(Icons.qr_code),
-                              color: const Color.fromARGB(255, 141, 26, 74),
-                              onPressed: () {},
-                            ),
-                          ]),
-                    ),
-                    Container(
-                        child: Row(children: const [
-                      SizedBox(width: 10),
-                      Expanded(
-                          child: Divider(
-                        thickness: 2,
-                        color: Colors.black,
-                      )),
-                      Expanded(
-                          child: Divider(
-                        thickness: 2,
-                      )),
-                    ])),
-                    Container(
-                      margin: const EdgeInsets.only(top: 25, bottom: 20),
-                      child: Column(
-                        children: productos.map((producto) {
-                          if (producto.estado == true) {
-                            return Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.network(producto.imagen),
-                                Positioned(
-                                  top: 10,
-                                  right: 10,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.help),
-                                    color:
-                                        const Color.fromARGB(255, 141, 26, 74),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LeerQR(producto.id)),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }).toList(),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 0.5, bottom: 20),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 0.5, bottom: 20),
-                    ),
-                  ]),
-                ),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  const Text(
+                    '     Productos',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      icon: const Icon(Icons.qr_code),
+                      color: const Color.fromARGB(255, 141, 26, 74),
+                      onPressed: () => {
+                            scanQR(),
+                          }),
+                ]),
               ),
+              Container(
+                  child: Row(children: const [
+                SizedBox(width: 10),
+                Expanded(
+                    child: Divider(
+                  thickness: 2,
+                  color: Colors.black,
+                )),
+                Expanded(
+                    child: Divider(
+                  thickness: 2,
+                )),
+              ])),
+              Container(
+                  child: Table(
+                children: [
+                  TableRow(
+                    children: [
+                      TableCell(
+                        child: Column(
+                          children: [
+                            const Text('Short Jean',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
+                            Stack(children: [
+                              Image.asset('images/prenda1.png'),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.help,
+                                    color: Color.fromARGB(255, 141, 26, 74),
+                                  ),
+                                  onPressed: () {
+                                    // Acción cuando se presiona el icono
+                                  },
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                      ),
+                      TableCell(
+                        child: Column(
+                          children: [
+                            const Text('Chaqueta efecto cuero',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
+                            Stack(children: [
+                              Image.asset('images/prenda3.png'),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.help,
+                                    color: Color.fromARGB(255, 141, 26, 74),
+                                  ),
+                                  onPressed: () {
+                                    // Acción cuando se presiona el icono
+                                  },
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(
+                        child: Column(
+                          children: [
+                            const Text('Camisa polo',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
+                            Stack(children: [
+                              Image.asset('images/prenda2.png'),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.help,
+                                    color: Color.fromARGB(255, 141, 26, 74),
+                                  ),
+                                  onPressed: () {
+                                    // Acción cuando se presiona el icono
+                                  },
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                      ),
+                      TableCell(
+                        child: Column(
+                          children: [
+                            const Text('Chaqueta beisbolera azul',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
+                            Stack(children: [
+                              Image.asset('images/prenda4.png'),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.help,
+                                    color: Color.fromARGB(255, 141, 26, 74),
+                                  ),
+                                  onPressed: () {
+                                    // Acción cuando se presiona el icono
+                                  },
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(
+                        child: Column(
+                          children: [
+                            const Text('Crop top',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
+                            Stack(children: [
+                              Image.asset('images/prenda5.png'),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.help,
+                                    color: Color.fromARGB(255, 141, 26, 74),
+                                  ),
+                                  onPressed: () {
+                                    // Acción cuando se presiona el icono
+                                  },
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                      ),
+                      TableCell(
+                        child: Column(
+                          children: [
+                            const Text('Chaqueta beisbolera beige',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 87, 83, 85))),
+                            Stack(children: [
+                              Image.asset('images/prenda6.png'),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.help,
+                                    color: Color.fromARGB(255, 141, 26, 74),
+                                  ),
+                                  onPressed: () {
+                                    // Acción cuando se presiona el icono
+                                  },
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
               Container(
                 margin: const EdgeInsets.only(top: 0.5, bottom: 20),
               ),

@@ -23,11 +23,11 @@ Future<List<ProductosList>> getProductsData() async {
           estado: datosPr[i]['estado'],
           estilo: datosPr[i]['estilo'],
           garantia: datosPr[i]['garantia'],
-          generoVestuario: datosPr[i]['generoVestuario'],
+          generoVestuario: datosPr[i]['generoVestuario'].toString(),
           imagen: datosPr[i]['imagen'],
           material: datosPr[i]['material'],
           nombre: datosPr[i]['nombre'],
-          paisOrigen: datosPr[i]['paisOrigen'],
+          paisOrigen: datosPr[i]['paisOrigen'].toString(),
           precio: datosPr[i]['precio'],
           talla: datosPr[i]['talla'],
           unidades: datosPr[i]['unidades']);
