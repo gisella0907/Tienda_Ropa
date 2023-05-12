@@ -4,6 +4,7 @@ import 'package:tienda_ropa/inicio.dart';
 import 'package:tienda_ropa/productos.dart';
 import 'package:tienda_ropa/models/productos_response.dart';
 import 'package:tienda_ropa/objects/peticionesGet.dart';
+import 'package:tienda_ropa/firma_dig/firma_digital.dart';
 
 class DetalleCompra extends StatefulWidget {
   DetalleCompra(this.carritoCompra, {super.key});
@@ -205,7 +206,12 @@ class _DetalleCompraState extends State<DetalleCompra> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+              },
               child: const Text("Confirmar compra "),
             ),
           ),
