@@ -81,7 +81,7 @@ class _LeerQRState extends State<LeerQR> {
                   child: IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.add),
-                    color: const Color.fromRGBO(140, 24, 68, 1),
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
               ),
@@ -96,21 +96,7 @@ class _LeerQRState extends State<LeerQR> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 120,
-                        child: const Text(
-                          "ID PRODUCTO:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Container(
-                        child: Text(widget.scanBarcode),
-                      )
-                    ],
-                  ),
+                  margin: const EdgeInsets.all(20),               
                 ),
 
                 // 2do

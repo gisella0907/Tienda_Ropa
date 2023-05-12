@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:tienda_ropa/models/novedades_response.dart';
 import 'package:tienda_ropa/models/productos_response.dart';
 import 'package:tienda_ropa/objects/peticionesGet.dart';
+import 'package:tienda_ropa/funcionalidades/leerqr.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -221,7 +222,10 @@ class _ProductosState extends State<Productos> {
                               icon: Icon(Icons.help),
                               color: Color.fromARGB(255, 141, 26, 74),
                               onPressed: () {
-                                print("detalle");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => LeerQR(producto.id)),
+                                );
                               },
                             ),
                           ),
